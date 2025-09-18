@@ -4,6 +4,7 @@
 #include <Window/IWindow.h>
 #include <Mesh.h>
 #include <Material.h>
+#include <Math/Matrix.h>
 
 namespace GameEngine
 {
@@ -26,8 +27,9 @@ namespace GameEngine
 
 		public:
 			virtual void Init() = 0;
-			virtual void Update(Mesh::Ptr mesh, Material::Ptr material) = 0;
+			virtual void Update(Mesh::Ptr mesh, Material::Ptr material, Core::Math::Matrix4x4f transform) = 0;
 			virtual Mesh::Ptr CreateBoxMesh() = 0;
+			virtual Mesh::Ptr CreateTetrahedronMesh() = 0;
 			virtual Material::Ptr GetMaterial(const std::string& name) = 0;
 			virtual void ExecuteCommandLists() = 0;
 			virtual void Flush() = 0;

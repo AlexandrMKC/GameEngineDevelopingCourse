@@ -22,9 +22,9 @@ namespace GameEngine
 			m_d3d12Private->Init();
 		}
 
-		void D3D12RHI::Update(Mesh::Ptr mesh, Material::Ptr material)
+		void D3D12RHI::Update(Mesh::Ptr mesh, Material::Ptr material, Core::Math::Matrix4x4f transform)
 		{
-			m_d3d12Private->Update(mesh, material);
+			m_d3d12Private->Update(mesh, material, transform);
 		}
 
 		Mesh::Ptr D3D12RHI::CreateBoxMesh()
@@ -66,6 +66,27 @@ namespace GameEngine
 				// bottom face
 				4, 0, 3,
 				4, 3, 7
+			};
+
+			return m_d3d12Private->CreateMesh(vertices.begin(), vertices.size(), sizeof(Vertex), indices.begin(), indices.size(), sizeof(uint16_t));
+		}
+
+		Mesh::Ptr D3D12RHI::CreateTetrahedronMesh()
+		{
+			array<Vertex, 4> vertices =
+			{
+				Vertex({ Math::Vector3f(+0.0f, +0.0f, +0.0f), Math::Vector4f((float*)&DirectX::Colors::Purple) }),
+				Vertex({ Math::Vector3f(+0.0f, +0.0f, +1.0f), Math::Vector4f((float*)&DirectX::Colors::Black) }),
+				Vertex({ Math::Vector3f(+0.0f, +1.0f, +0.0f), Math::Vector4f((float*)&DirectX::Colors::Red) }),
+				Vertex({ Math::Vector3f(+1.0f, +0.0f, +0.0f), Math::Vector4f((float*)&DirectX::Colors::Green) })
+			};
+
+			array<uint16_t, 12> indices =
+			{
+				0, 1, 2,
+				1, 3, 2,
+				0, 3, 1,
+				0, 2, 3
 			};
 
 			return m_d3d12Private->CreateMesh(vertices.begin(), vertices.size(), sizeof(Vertex), indices.begin(), indices.size(), sizeof(uint16_t));

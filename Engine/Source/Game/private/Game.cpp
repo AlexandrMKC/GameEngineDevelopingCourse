@@ -1,4 +1,5 @@
 #include <Game.h>
+#include <chrono>
 
 namespace GameEngine
 {
@@ -16,6 +17,8 @@ namespace GameEngine
 	{
 		assert(PlatformLoop != nullptr);
 
+		std::chrono::steady_clock::time_point last_time = std::chrono::steady_clock::now();
+
 		bool quit = false;
 		while (!quit)
 		{
@@ -24,7 +27,11 @@ namespace GameEngine
 
 			ProcessSystemParams();
 
-			m_renderEngine->Update();
+			std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now();
+			auto dt = std::chrono::duration_cast<std::chrono::microseconds>(current_time - last_time).count();
+			last_time = current_time;
+
+			m_renderEngine->Update(dt);
 		}
 	}
 
