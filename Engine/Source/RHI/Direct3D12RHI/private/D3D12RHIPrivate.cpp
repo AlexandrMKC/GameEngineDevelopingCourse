@@ -255,7 +255,7 @@ namespace GameEngine
 
 			float mTheta = 1.7f * DirectX::XM_PI;
 			float mPhi = DirectX::XM_PIDIV4;
-			float mRadius = 6.0f;
+			float mRadius = 7.0f;
 
 			// Convert Spherical to Cartesian coordinates.
 			float x = mRadius * sinf(mPhi) * cosf(mTheta);

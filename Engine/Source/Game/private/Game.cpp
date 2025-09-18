@@ -28,7 +28,7 @@ namespace GameEngine
 			ProcessSystemParams();
 
 			std::chrono::steady_clock::time_point current_time = std::chrono::steady_clock::now();
-			auto dt = std::chrono::duration_cast<std::chrono::microseconds>(current_time - last_time).count();
+			float dt = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(current_time - last_time).count());
 			last_time = current_time;
 
 			m_renderEngine->Update(dt);
