@@ -5,7 +5,7 @@ namespace GameEngine::Core {
 
 	InputManager::InputManager()
 	{
-		INIReader reader = INIReader("config.ini");
+		INIReader reader = INIReader("../../../../../config.ini");
 		
 		auto value = reader.Get("Key", "forward", "W");
 		key = static_cast<char>(value[0]);
