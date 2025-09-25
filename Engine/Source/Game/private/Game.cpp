@@ -3,6 +3,8 @@
 #include <Game.h>
 #include <GameObject.h>
 
+#include <InputManager.h>
+
 namespace GameEngine
 {
 	Game::Game(
@@ -48,6 +50,14 @@ namespace GameEngine
 
 	void Game::Update(float dt)
 	{
+		//auto& test = Core::InputManager::getInstance();
+		//test.Update();
+		/*if (test.IsPressed()) {
+			Math::Vector3f pos = m_Objects[0]->GetPosition();
+
+			pos.x += 0.1f * dt;
+			m_Objects[0]->SetPosition(pos, m_renderThread->GetMainFrame());
+		}*/
 		//for (int i = 0; i < m_Objects.size(); ++i)
 		//{
 		//	Math::Vector3f pos = m_Objects[i]->GetPosition();

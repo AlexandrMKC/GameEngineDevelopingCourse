@@ -8,12 +8,24 @@
 #include <WindowEventsCallbacks.h>
 #include <Window/IWindow.h>
 
+#include <InputManager.h>
+
 namespace GameEngine::Core
 {
 	Window* g_MainWindowsApplication = nullptr;
 
 	LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
+		auto& inputManager = InputManager::getInstance();
+
+		inputManager.Update();
+
+		if (inputManager.IsPressed()) {
+			Math::Vector3f pos = g_MainCamera->GetPosition();
+			pos.y += 0.1f;
+			g_MainCamera->SetPosition(pos);
+		}
+
 		switch (msg)
 		{
 		case WM_DESTROY:

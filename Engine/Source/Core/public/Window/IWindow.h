@@ -3,6 +3,8 @@
 #include <Core/export.h>
 #include <Vector.h>
 
+#include <InputManager.h>
+
 namespace GameEngine::Core
 {
 	class CORE_API Window final

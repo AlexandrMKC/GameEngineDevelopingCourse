@@ -7,25 +7,6 @@
 
 namespace GameEngine::Core
 {
-    void PressKeyA(Camera* camera) {
-        Math::Vector3f pos = camera->GetPosition();
-
-        //	// Showcase
-        //	if (i == 0)
-        //	{
-        //		pos.x += 0.5f * dt;
-        //	}
-        //	else if (i == 1)
-        //	{
-        //		pos.y -= 0.5f * dt;
-        //	}
-        //	else if (i == 2)
-        //	{
-        //		pos.x += 0.5f * dt;
-        //		pos.y -= 0.5f * dt;
-        //	}
-        camera->SetPosition(pos);
-    }
 
     void OnMouseDown(WPARAM btnState, int x, int y, Window* window)
     {
