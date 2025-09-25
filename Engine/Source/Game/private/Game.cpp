@@ -48,25 +48,25 @@ namespace GameEngine
 
 	void Game::Update(float dt)
 	{
-		for (int i = 0; i < m_Objects.size(); ++i)
-		{
-			Math::Vector3f pos = m_Objects[i]->GetPosition();
+		//for (int i = 0; i < m_Objects.size(); ++i)
+		//{
+		//	Math::Vector3f pos = m_Objects[i]->GetPosition();
 
-			// Showcase
-			if (i == 0)
-			{
-				pos.x += 0.5f * dt;
-			}
-			else if (i == 1)
-			{
-				pos.y -= 0.5f * dt;
-			}
-			else if (i == 2)
-			{
-				pos.x += 0.5f * dt;
-				pos.y -= 0.5f * dt;
-			}
-			m_Objects[i]->SetPosition(pos, m_renderThread->GetMainFrame());
-		}
+		//	// Showcase
+		//	if (i == 0)
+		//	{
+		//		pos.x += 0.5f * dt;
+		//	}
+		//	else if (i == 1)
+		//	{
+		//		pos.y -= 0.5f * dt;
+		//	}
+		//	else if (i == 2)
+		//	{
+		//		pos.x += 0.5f * dt;
+		//		pos.y -= 0.5f * dt;
+		//	}
+		//	m_Objects[i]->SetPosition(pos, m_renderThread->GetMainFrame());
+		//}
 	}
 }

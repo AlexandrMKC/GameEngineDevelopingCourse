@@ -1,11 +1,14 @@
 # get all files
 file(GLOB
 	PRIVATE_FILES
+	private/Reader/*.h
+	private/Reader/*.cpp
 	private/*.cpp
 	private/*.h
 )
 file(GLOB
 	PUBLIC_FILES
+	public/Reader/*.h
 	public/*.h
 )
 
@@ -47,6 +50,8 @@ target_sources(Core
 target_include_directories(Core 
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private
+	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private/Reader
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public/Reader
 )
 
 # windows-specific
