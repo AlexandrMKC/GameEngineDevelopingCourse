@@ -6,6 +6,7 @@
 #include <MovingObject.h>
 #include <PhysicalObject.h>
 #include <Input/InputHandler.h>
+#include <random>
 
 namespace GameEngine
 {
@@ -20,17 +21,26 @@ namespace GameEngine
 
 		m_renderThread = std::make_unique<Render::RenderThread>();
 
-		// How many objects do we want to create
-		m_Objects.push_back(new PhysicalObject(Math::Vector3f(0.0, 0.0, 0.0)));
-		Render::RenderObject** renderObject = m_Objects.back()->GetRenderObjectRef();
-		m_renderThread->EnqueueCommand(Render::ERC::CreateRenderObject, RenderCore::DefaultGeometry::Cube(), renderObject);
-		m_Objects.back()->Init();
-		/*for (int i = 0; i < 3; ++i)
-		{
-			m_Objects.push_back(new GameObject());
-			Render::RenderObject** renderObject = m_Objects.back()->GetRenderObjectRef();
-			m_renderThread->EnqueueCommand(Render::ERC::CreateRenderObject, RenderCore::DefaultGeometry::Cube(), renderObject);
-		}*/
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dist(1, 3);
+
+		for (int i = 0; i < 10; ++i) {
+			for (int j = 0; j < 10; j++) {
+				int p = dist(gen);
+				if (p == 1) {
+					m_Objects.push_back(new PhysicalObject(Math::Vector3f(static_cast<float>(i) * 5.0f, 0.0, static_cast<float>(j) * 5.0f)));
+				}
+				else if(p == 2) {
+					m_Objects.push_back(new MovingObject(Math::Vector3f(static_cast<float>(i) * 5.0f, 0.0, static_cast<float>(j) * 5.0f)));
+				}
+				else {
+					m_Objects.push_back(new ManagedObject(Math::Vector3f(static_cast<float>(i) * 5.0f, 0.0, static_cast<float>(j) * 5.0f)));
+				}
+				Render::RenderObject** renderObject = m_Objects.back()->GetRenderObjectRef();
+				m_renderThread->EnqueueCommand(Render::ERC::CreateRenderObject, RenderCore::DefaultGeometry::Cube(), renderObject);
+			}
+		}
 
 		Core::g_InputHandler->RegisterCallback("GoForward", [&]() { Core::g_MainCamera->Move(Core::g_MainCamera->GetViewDir()); });
 		Core::g_InputHandler->RegisterCallback("GoBack", [&]() { Core::g_MainCamera->Move(-Core::g_MainCamera->GetViewDir()); });

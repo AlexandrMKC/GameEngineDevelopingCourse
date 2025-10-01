@@ -8,17 +8,13 @@ namespace GameEngine
 	public:
 
 		ManagedObject(Math::Vector3f pos) : GameObject(pos) {
-
-		}
-
-		void Init() {
 			Core::g_InputHandler->RegisterCallback("Left", [&]() { Left(); });
 			Core::g_InputHandler->RegisterCallback("Right", [&]() { Right(); });
 		}
 
 		void Update(float dt, size_t frame) {
 			Math::Vector3f pos = GetPosition();
-			pos.x = pos.x + (input.y - input.x)*speed*dt;
+			pos.y += (input.y - input.x)*speed*dt;
 			SetPosition(pos, frame);
 			input = Math::Vector2f(0.0f, 0.0f);
 		}

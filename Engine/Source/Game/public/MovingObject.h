@@ -11,15 +11,11 @@ namespace GameEngine
 
 		}
 
-		void Init() {
-
-		}
-
 		void Update(float dt, size_t frame) {
 			Math::Vector3f pos = GetPosition();
 			t += dt;
 			t = fmod(t, 6.28f);
-			pos.x = amplitude*sin(angularSpeed*t);
+			pos.y = amplitude*sin(angularSpeed*t);
 			SetPosition(pos, frame);
 		}
 

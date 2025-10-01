@@ -31,10 +31,6 @@ namespace GameEngine
 			return m_Position;
 		}
 
-		virtual void Init() {
-
-		}
-
 		virtual void Update(float dt, size_t frame) {
 
 		}

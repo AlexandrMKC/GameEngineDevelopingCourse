@@ -7,10 +7,6 @@ namespace GameEngine
 	public:
 
 		PhysicalObject(Math::Vector3f pos) : GameObject(pos) {
-
-		}
-
-		void Init() {
 			speed = 2.0f;
 		}
 
