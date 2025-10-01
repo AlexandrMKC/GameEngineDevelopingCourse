@@ -6,10 +6,12 @@
 
 namespace GameEngine
 {
-	class GameObject final
+	class GameObject
 	{
 	public:
-		GameObject() = default;
+		GameObject(Math::Vector3f pos) {
+			m_Position = pos;
+		}
 
 	public:
 		Render::RenderObject** GetRenderObjectRef() { return &m_RenderObject; }
@@ -29,9 +31,17 @@ namespace GameEngine
 			return m_Position;
 		}
 
+		virtual void Init() {
+
+		}
+
+		virtual void Update(float dt, size_t frame) {
+
+		}
+
 	protected:
 		Render::RenderObject* m_RenderObject = nullptr;
 
-		Math::Vector3f m_Position = Math::Vector3f::Zero();
+		Math::Vector3f m_Position;
 	};
 }
