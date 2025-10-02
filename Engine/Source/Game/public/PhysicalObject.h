@@ -7,7 +7,7 @@ namespace GameEngine
 	public:
 
 		PhysicalObject(Math::Vector3f pos) : GameObject(pos) {
-			speed = 2.0f;
+			speed = 4.0f;
 		}
 
 		void Update(float dt, size_t frame) {
@@ -17,7 +17,7 @@ namespace GameEngine
 			speed -= g * dt;
 
 			if (pos.y <= 0.0) {
-				speed = 2.0f;
+				speed = 4.0f;
 				pos.y = 0.0f;
 			}
 
@@ -25,7 +25,7 @@ namespace GameEngine
 		}
 
 	private:
-		float g = 0.5f;
+		float g = 1.2f;
 		float speed = 0.0f;
 	};
 }

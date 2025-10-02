@@ -14,7 +14,7 @@ namespace GameEngine
 
 		void Update(float dt, size_t frame) {
 			Math::Vector3f pos = GetPosition();
-			pos.y += (input.y - input.x)*speed*dt;
+			pos.z += (input.y - input.x)*speed*dt;
 			SetPosition(pos, frame);
 			input = Math::Vector2f(0.0f, 0.0f);
 		}
