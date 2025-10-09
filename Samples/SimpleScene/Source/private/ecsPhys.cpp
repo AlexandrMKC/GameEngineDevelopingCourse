@@ -9,8 +9,10 @@ namespace
 	}
 }
 
+
 void RegisterEcsPhysSystems(flecs::world& world)
 {
+
 	world.system<Velocity, const Gravity, BouncePlane*, Position*>()
 		.each([&](flecs::entity e, Velocity& vel, const Gravity& grav, BouncePlane* plane, Position* pos)
 	{
@@ -46,15 +48,6 @@ void RegisterEcsPhysSystems(flecs::world& world)
 	});
 
 
-	world.system<Velocity, const FrictionAmount>()
-		.each([&](flecs::entity e, Velocity& vel, const FrictionAmount& friction)
-	{
-		vel.value.x -= vel.value.x * friction.value * world.delta_time();
-		vel.value.y -= vel.value.y * friction.value * world.delta_time();
-		vel.value.z -= vel.value.z * friction.value * world.delta_time();
-	});
-
-
 	world.system<Position, const Velocity>()
 		.each([&](flecs::entity e, Position& pos, const Velocity& vel)
 	{
@@ -63,12 +56,4 @@ void RegisterEcsPhysSystems(flecs::world& world)
 		pos.value.z += vel.value.z * world.delta_time();
 	});
 
-
-	world.system<Position, const ShiverAmount>()
-		.each([&](flecs::entity e, Position& pos, const ShiverAmount& shiver)
-	{
-		pos.value.x += rand_flt(-shiver.value, shiver.value);
-		pos.value.y += rand_flt(-shiver.value, shiver.value);
-		pos.value.z += rand_flt(-shiver.value, shiver.value);
-	});
 }
