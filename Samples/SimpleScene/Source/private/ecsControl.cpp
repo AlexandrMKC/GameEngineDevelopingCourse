@@ -7,12 +7,16 @@
 #include <Input/InputHandler.h>
 #include <Vector.h>
 
+#include <BasicGeometry.h>
+#include <RenderObject.h>
+
+
 using namespace GameEngine;
 
 void RegisterEcsControlSystems(flecs::world& world)
 {
-	world.system<Position, CameraPtr, const Speed, const ControllerPtr>()
-		.each([&](flecs::entity e, Position& position, CameraPtr& camera, const Speed& speed, const ControllerPtr& controller)
+	world.system<Position, CameraPtr, const Speed, Timer, const ControllerPtr>()
+		.each([&](flecs::entity e, Position& position, CameraPtr& camera, const Speed& speed, Timer& timer, const ControllerPtr& controller)
 	{
 		Math::Vector3f currentMoveDir = Math::Vector3f::Zero();
 		if (controller.ptr->IsPressed("GoLeft"))
@@ -31,23 +35,31 @@ void RegisterEcsControlSystems(flecs::world& world)
 		{
 			currentMoveDir = currentMoveDir + camera.ptr->GetViewDir();
 		}
+		if (controller.ptr->IsPressed("Shot"))
+		{
+			if (timer.currentTime > timer.targetTime) {
+
+				flecs::entity bullet = world.entity()
+					.set(Position{ position.x, position.y, position.z })
+					.set(Velocity{ camera.ptr->GetViewDir().x*40.f, camera.ptr->GetViewDir().y * 40.f, camera.ptr->GetViewDir().z * 40.f })
+					.set(Gravity{ 0.f, -9.8065f, 0.f })
+					.set(Ground{ 0.f, 1.0f, 0.f, 0.f})
+					.set(Active{ true })
+					.set(Bullet{ 1.0 })
+					.set(EntitySystem::ECS::GeometryPtr{ RenderCore::BasicGeometry::Bullet()})
+					.set(EntitySystem::ECS::RenderObjectPtr{ new Render::RenderObject() });
+
+				timer.currentTime = 0.f;
+			}
+		}
+
+		timer.currentTime = timer.currentTime + world.delta_time();
+
 		position.x = position.x + currentMoveDir.Normalized().x * speed.value * world.delta_time();
 		position.y = position.y + currentMoveDir.Normalized().y * speed.value * world.delta_time();
 		position.z = position.z + currentMoveDir.Normalized().z * speed.value * world.delta_time();
 		camera.ptr->SetPosition(Math::Vector3f(position.x, position.y, position.z));
 	});
 
-	world.system<const Position, Velocity, const ControllerPtr, const BouncePlane, const JumpSpeed>()
-		.each([&](const Position& pos, Velocity& vel, const ControllerPtr& controller, const BouncePlane& plane, const JumpSpeed& jump)
-	{
-		constexpr float planeEpsilon = 0.1f;
-		if (plane.x * pos.x + plane.y * pos.y + plane.z * pos.z < plane.w + planeEpsilon)
-		{
-			if (controller.ptr->IsPressed("Jump"))
-			{
-				vel.y = jump.value;
-			}
-		}
-	});
 }
 

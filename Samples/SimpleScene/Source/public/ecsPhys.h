@@ -30,22 +30,12 @@ ECS_STRUCT(Gravity,
 	float z;
 });
 
-ECS_STRUCT(BouncePlane,
+ECS_STRUCT(Ground,
 {
 	float x;
 	float y;
 	float z;
 	float w;
-});
-
-ECS_STRUCT(Bounciness,
-{
-	float value;
-});
-
-ECS_STRUCT(ShiverAmount,
-{
-	float value;
 });
 
 ECS_STRUCT(FrictionAmount,
@@ -58,3 +48,29 @@ ECS_STRUCT(Speed,
 	float value;
 });
 
+ECS_STRUCT(DestructionTimer,
+{
+	float destructionTime;
+	float currentTime;
+});
+
+ECS_STRUCT(Timer,
+{
+	float targetTime;
+	float currentTime;
+});
+
+ECS_STRUCT(Active,
+{
+	bool isActive;
+});
+
+ECS_STRUCT(Bullet,
+{
+	float damage;
+});
+
+ECS_STRUCT(Health,
+{
+	float value;
+});
