@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <level name="SomeRandomName">
-   <entity Name="BounceCube" Position="2.0,0.0,0.0" Velocity="0.0,3.0,0.0" Gravity="0.0,-9.8,0.0" BouncePlane="0.0,1.0,0.0,5.0" Bounciness="1.0" GeometryPtr="Cube"/>
-   <entity Name="ControllableCube" Position="-2.0,0.0,0.0" Velocity="0.0,0.0,0.0" Speed="10" FrictionAmount="0.9" JumpSpeed="10" Gravity="0.0,-9.8,0.0" BouncePlane="0.0,1.0,0.0,5.0" Bounciness="0.3" GeometryPtr="Cube" ControllerPtr="Input_default.ini"/>
+   <!-- <entity Name="BounceCube" Position="8.0,0.0,0.0" Velocity="0.0,8.0,0.0" Gravity="0.0,-9.8,0.0" BouncePlane="0.0,1.0,0.0,5.0" Bounciness="1.0" GeometryPtr="Cube"/>
+   <entity Name="ControllableCube" Position="-8.0,0.0,0.0" Velocity="0.0,0.0,0.0" Speed="10" FrictionAmount="0.9" JumpSpeed="10" Gravity="0.0,-9.8,0.0" BouncePlane="0.0,1.0,0.0,5.0" Bounciness="0.3" GeometryPtr="Cube" ControllerPtr="Input_default.ini"/> -->
+   <entity Name="DestractionCube" Position="2.0,0.0,2.0" Velocity="0.0,0.0,0.0" FrictionAmount="0.9" CollisionShape="1.5" DestructionTimer="3.0,0.0" GeometryPtr="Cube"/>
+   <entity Name="interactingCube1" Position="-2.0,0.0,5.0" Velocity="0.0,0.0,-7.0" FrictionAmount="0.9" CollisionShape="1.5" Health="2.0" GeometryPtr="Cube"/>
+   <entity Name="interactingCube2" Position="-2.0,0.0,-5.0" Velocity="0.0,0.0,7.0" FrictionAmount="0.9" CollisionShape="1.5" Health="1.0" GeometryPtr="Cube"/>
 </level>

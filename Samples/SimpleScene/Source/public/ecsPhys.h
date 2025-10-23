@@ -51,3 +51,30 @@ struct Speed
 	float value;
 };
 
+struct DestructionTimer
+{
+	float destructionTime;
+	float currentTime;
+};
+
+struct Timer
+{
+	float targetTime;
+	float currentTime;
+};
+
+struct CollisionShape
+{
+	float radius;
+};
+
+struct Bullet
+{
+	float damage;
+};
+
+struct Health
+{
+	float value;
+};
+
