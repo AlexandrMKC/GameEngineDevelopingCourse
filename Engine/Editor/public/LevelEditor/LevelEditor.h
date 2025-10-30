@@ -29,6 +29,7 @@ namespace GameEngine
 			float m_TimeToShowSaveButtonMessage = 3.f;
 
 			std::optional<World::Level> m_Level = std::nullopt;
+			flecs::world& world;
 		};
 	}
 }

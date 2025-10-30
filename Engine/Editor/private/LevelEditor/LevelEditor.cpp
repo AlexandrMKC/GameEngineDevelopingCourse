@@ -9,11 +9,15 @@
 #include <imgui.h>
 #include <imgui_stdlib.h>
 
+#include <array>
+#include <Debug/Console.h>
+#include <DefaultGeometry.h>
+
 namespace GameEngine
 {
 	namespace Editor
 	{
-		LevelEditor::LevelEditor(flecs::world& world)
+		LevelEditor::LevelEditor(flecs::world& world): world(world)
 		{
 			m_Level = LevelSerializer::Deserialize(Core::g_FileSystem->GetFilePath("Levels/Main.xml").generic_string());
 
@@ -69,12 +73,61 @@ namespace GameEngine
 					{
 						for (World::LevelObject::Component& component : levelObject.GetComponents())
 						{
-							ImGui::InputText(component.first.c_str(), &component.second);
+							if (!std::strcmp(component.first.c_str(), "Position")) {
+								std::array<float, 3> pos;
+
+								
+								const char* compValue = component.second.c_str();
+								char* end;
+
+								float f = std::strtof(compValue, &end);
+								pos[0] = f;
+								compValue = end + 1;
+
+								f = std::strtof(compValue, &end);
+								pos[1] = f;
+								compValue = end + 1;
+
+								f = std::strtof(compValue, &end);
+								pos[2] = f;
+
+								ImGui::InputFloat3(component.first.c_str(), pos.data(), "%.1f");
+
+								component.second = std::to_string(pos[0]) + "," + std::to_string(pos[1]) + "," + std::to_string(pos[2]);
+							}
+							else {
+								ImGui::InputText(component.first.c_str(), &component.second);
+							}
+							
+							
 						}
 
 						ImGui::TreePop();
 					}
 				}
+			}
+
+			if (ImGui::Button("Add"))
+			{
+				//World::Level newLevel(m_Level->GetName());
+				World::LevelObject newObj;
+				newObj.AddComponent("Name", "Test");
+				
+				//m_Level.value().AddLevelObject(newObj);
+				/*if (m_Level.has_value()) {
+					m_Level->AddLevelObject(newObj);
+				}
+				else {
+					m_Level.emplace();
+					m_Level->AddLevelObject(newObj);
+				}*/
+				
+				
+
+				flecs::entity bullet = world.entity("Test")
+					.set(EntitySystem::EditorECS::Position{ 0.0, 0.0, 0.0 })
+					.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube()});
+				Save();
 			}
 
 			if (ImGui::Button("Save"))
