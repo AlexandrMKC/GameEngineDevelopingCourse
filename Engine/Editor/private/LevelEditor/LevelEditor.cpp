@@ -19,6 +19,7 @@ namespace GameEngine
 	{
 		LevelEditor::LevelEditor(flecs::world& world): world(world)
 		{
+			
 			m_Level = LevelSerializer::Deserialize(Core::g_FileSystem->GetFilePath("Levels/Main.xml").generic_string());
 
 			for (World::LevelObject& levelObject : m_Level->GetLevelObjects())
@@ -91,7 +92,7 @@ namespace GameEngine
 								f = std::strtof(compValue, &end);
 								pos[2] = f;
 
-								ImGui::InputFloat3(component.first.c_str(), pos.data(), "%.1f");
+								ImGui::InputFloat3(component.first.c_str(), pos.data(), "%.3f");
 
 								component.second = std::to_string(pos[0]) + "," + std::to_string(pos[1]) + "," + std::to_string(pos[2]);
 							}
@@ -109,25 +110,49 @@ namespace GameEngine
 
 			if (ImGui::Button("Add"))
 			{
-				//World::Level newLevel(m_Level->GetName());
 				World::LevelObject newObj;
-				newObj.AddComponent("Name", "Test");
-				
-				//m_Level.value().AddLevelObject(newObj);
-				/*if (m_Level.has_value()) {
-					m_Level->AddLevelObject(newObj);
-				}
-				else {
-					m_Level.emplace();
-					m_Level->AddLevelObject(newObj);
-				}*/
-				
-				
+				std::vector<World::LevelObject> objects = m_Level->GetLevelObjects();
+				std::string name = "Cube" + std::to_string(objects.size());
+				newObj.SetName(name.c_str());
+				newObj.AddComponent("Position", "0.0,0.0,0.0");
+				newObj.AddComponent("GeometryPtr", "Cube");
+				m_Level.value().AddLevelObject(newObj);
 
-				flecs::entity bullet = world.entity("Test")
-					.set(EntitySystem::EditorECS::Position{ 0.0, 0.0, 0.0 })
-					.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube()});
-				Save();
+				for (World::LevelObject& levelObject : m_Level->GetLevelObjects()) {
+					flecs::entity entity = world.entity(levelObject.GetName().c_str());
+
+					World::LevelObject::ComponentList& componentList = levelObject.GetComponents();
+
+					World::LevelObject::ComponentList::iterator positionAttribute = std::ranges::find_if(componentList,
+						[](World::LevelObject::Component& component)
+						{
+							return !std::strcmp(component.first.c_str(), "Position");
+						}
+					);
+
+					World::LevelObject::ComponentList::iterator geometryAttribute = std::ranges::find_if(componentList,
+						[](World::LevelObject::Component& component)
+						{
+							return !std::strcmp(component.first.c_str(), "GeometryPtr");
+						}
+					);
+
+					if (positionAttribute != componentList.end() &&
+						geometryAttribute != componentList.end())
+					{
+						assert(World::WorldParser::GetCustomComponents().contains(geometryAttribute->second));
+
+						entity.set(EntitySystem::LevelEditorECS::PositionDesc{ &positionAttribute->second });
+
+						// Can be set to 0 since it doesn't matter now, will be updated by the system
+						entity.set(EntitySystem::EditorECS::Position{ 0.0f, 0.0f, 0.0f });
+						entity.set(GeometryPtr{
+							reinterpret_cast<RenderCore::Geometry*>(
+								World::WorldParser::GetCustomComponents()[geometryAttribute->second]
+								)
+							});
+					}
+				}
 			}
 
 			if (ImGui::Button("Save"))
