@@ -1,0 +1,91 @@
+apply plugin: 'com.android.application'
+
+android {
+
+	namespace 'com.audiokinetic.IntegrationDemo'
+	ndkPath = System.getenv("NDKROOT")
+
+	def ndkProps = new Properties()
+	file(ndkPath + "/source.properties").withInputStream { ndkProps.load(it) }
+
+	ndkVersion = ndkProps.getProperty("Pkg.Revision")
+	compileSdkVersion = 34
+
+	defaultConfig {
+		applicationId = 'com.audiokinetic.IntegrationDemo'
+		targetSdkVersion  34
+	}
+	flavorDimensions = ["pm5"]
+
+	// NOTE: Starting with NDK r24 and up, absolute minimum API is now 19
+	def configs = ["debug", "profile", "release"]
+	def abis = [["x86", 19], ["x86_64", 21], ["armeabi-v7a", 19], ["arm64-v8a", 21]]
+
+	configs.each{ cfg ->
+		abis.each { abidescr ->
+			def abi = abidescr[0]
+			def sdkver = abidescr[1]
+			def flavor = cfg + "_" + abi
+			def pm5 = cfg + "_android_" + abi
+			productFlavors.create(flavor, {
+				dimension "pm5"
+				minSdkVersion sdkver
+				ndk {
+					abiFilter abi
+				}
+			})
+			android.sourceSets[flavor].assets.srcDirs += ["../../WwiseProject/GeneratedSoundBanks/Android"]
+		}
+	}
+}
+
+// Our build system wants nothing to do with what Gradle considers "Release" builds
+android.variantFilter { variant ->
+	def build = variant.buildType.name
+	if (build == "release")
+		variant.setIgnore(true)
+}
+
+android.applicationVariants.configureEach { variant ->
+	def split = variant.flavorName.split("_", 2)
+	def config = split[0]
+	def abi = split[1]
+
+	String variantSuffix = variant.name.capitalize()
+
+	// After assets are merged, and before APK is produced, copy the banks and media into the assets folder
+	def copyAssets = project.tasks.register("copy${variantSuffix}Assets", Copy) {
+		from(project.file('../assets').getAbsolutePath())
+		into(project.file('src/main/assets').getAbsolutePath())
+	}
+	variant.mergeAssetsProvider.get().dependsOn copyAssets
+
+	// After JNI libs are merged, and before APK is produced, copy the shared libraries into the jniLibs folder
+	def mergeJniLibsTask = project.tasks.named("merge${variantSuffix}JniLibFolders")
+	def copyDynamicLibs = project.tasks.register("copy${config}${abi}PluginLibs", Copy) {
+		from(project.file("../../../../Android_${abi}/${config}/bin").getAbsolutePath())
+		include('*.so')
+		into(project.file("src/main/jniLibs/${abi}").getAbsolutePath())
+	}
+	def copyAppLib = project.tasks.register("copy${config}${abi}AppLib", Copy) {
+		from(project.file("../../../../Android_${abi}/${config}/bin/IntegrationDemo/libIntegrationDemo.so").getAbsolutePath())
+		into(project.file("src/main/jniLibs/${abi}").getAbsolutePath())
+	}
+	mergeJniLibsTask.get().dependsOn copyDynamicLibs
+	mergeJniLibsTask.get().dependsOn copyAppLib
+
+	// After the APK is produced, copy it to the final destination in SDK/Android_[ABI]/[Config]/bin/IntegrationDemo
+	project.tasks.register("publish${variant.name}Apk", Copy) {
+		from(variant.outputs[0].outputFile) {
+			include '*.apk'
+			rename variant.outputs[0].outputFile.name, "IntegrationDemo.apk"
+		}
+		into(project.file("../../../../Android_${abi}/${config}/bin/IntegrationDemo/").getAbsolutePath())
+		dependsOn variant.assembleProvider
+	}
+}
+
+dependencies {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	implementation 'com.android.support:appcompat-v7:28.0.0'
+}
