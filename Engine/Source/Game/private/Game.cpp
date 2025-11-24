@@ -4,6 +4,8 @@
 #include <Game.h>
 #include <Input/InputHandler.h>
 
+#include <AudioEngine.h>
+
 namespace GameEngine
 {
 	Game::Game(
@@ -11,6 +13,9 @@ namespace GameEngine
 	) :
 		PlatformLoop(PlatformLoopFunc)
 	{
+
+		Audio::g_AudioEngine = new Audio::AudioEngine();
+
 		Core::g_MainCamera = new Core::Camera();
 		Core::g_MainCamera->SetPosition(Math::Vector3f(0.0f, 12.0f, -10.0f));
 		Core::g_MainCamera->SetViewDir(Math::Vector3f(0.0f, -6.0f, 12.0f).Normalized());
@@ -39,6 +44,8 @@ namespace GameEngine
 			Update(dt);
 
 			m_renderThread->OnEndFrame();
+
+			Audio::g_AudioEngine->Update();
 
 			// The most common idea for such a loop is that it returns false when quit is required, or true otherwise
 			quit = !PlatformLoop();

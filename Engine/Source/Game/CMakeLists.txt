@@ -55,6 +55,7 @@ target_link_libraries(Game PRIVATE
 	RenderCore
 	RenderEngine
 	ScriptSystem
+	AudioEngine
 )
 
 target_precompile_headers(Game

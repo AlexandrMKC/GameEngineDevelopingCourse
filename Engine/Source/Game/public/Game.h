@@ -31,7 +31,6 @@ namespace GameEngine
 		ScriptSystem::ScriptManager::Ptr m_ScriptManager = nullptr;
 		Render::RenderThread::Ptr m_renderThread = nullptr; 
 		GameFramework::Ptr m_GameFramework = nullptr;
-
 		Core::Timer m_GameTimer;
 	};
 }

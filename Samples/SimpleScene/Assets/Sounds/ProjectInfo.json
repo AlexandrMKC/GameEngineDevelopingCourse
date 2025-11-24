@@ -1,0 +1,29 @@
+{
+ "ProjectInfo": {
+  "Project": {
+   "Name": "GameEngineCourse",
+   "GUID": "{AB30A9E0-2708-4AE4-B8B1-4F34C9668213}",
+   "Generator": "2025.1.2.8976"
+  },
+  "CacheRoot": "GameEngineCourse/.cache",
+  "Platforms": [
+   {
+    "Name": "Windows",
+    "GUID": "{69980200-AF12-4EF9-B185-19010D20DE46}",
+    "BasePlatform": "Windows",
+    "BasePlatformGUID": "{6E0CB257-C6C8-4C5C-8366-2740DFC441EB}",
+    "Path": "GameEngineCourse/GeneratedSoundBanks/Windows"
+   }
+  ],
+  "Languages": [
+   {
+    "Name": "English(US)",
+    "Id": "684519430",
+    "GUID": "{8BF15036-5470-4710-9BE4-6D7EAA672050}",
+    "Default": "true",
+    "UseAsStandIn": "true"
+   }
+  ],
+  "FileHash": "{F2403B46-32D7-48FB-81D9-C8F1D81CE2F1}"
+ }
+}

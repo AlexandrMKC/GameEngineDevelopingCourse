@@ -7,6 +7,8 @@
 #include <Input/InputHandler.h>
 #include <Vector.h>
 
+#include <AudioEngine.h>
+
 using namespace GameEngine;
 
 void RegisterEcsControlSystems(flecs::world& world)
@@ -49,5 +51,16 @@ void RegisterEcsControlSystems(flecs::world& world)
 			}
 		}
 	});
+
+	world.system<const EntitySystem::ECS::AudioObject, const ControllerPtr>()
+		.kind(flecs::OnUpdate)
+		.each([&](flecs::entity e, const EntitySystem::ECS::AudioObject& audioObj, const ControllerPtr& controller)
+	{
+		if (controller.ptr->IsPressed("Jump"))
+		{
+			Audio::g_AudioEngine->PlayAudioEvent(audioObj.id, "Play");
+		}
+	});
+
 }
 

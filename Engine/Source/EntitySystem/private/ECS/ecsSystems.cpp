@@ -6,6 +6,8 @@
 #include <RenderThread.h>
 #include <RenderObject.h>
 
+#include <AudioEngine.h>
+
 namespace GameEngine::EntitySystem::ECS
 {
 	void RegisterEcsCoreSystems(flecs::world& world)
@@ -19,6 +21,13 @@ namespace GameEngine::EntitySystem::ECS
 			e.set(RenderObjectPtr{ renderObjectPtr });
 			renderThread->ptr->EnqueueCommand(Render::ERC::CreateRenderObject, geometry.ptr, renderObjectPtr);
 			e.remove<GeometryPtr>();
+		});
+
+		world.system<AudioObject>()
+			.kind(flecs::OnStart)
+			.each([&](flecs::entity e, AudioObject& audioObj)
+		{
+			audioObj.id = Audio::g_AudioEngine->CreateNewObj();
 		});
 	}
 }
