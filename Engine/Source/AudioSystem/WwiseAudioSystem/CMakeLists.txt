@@ -24,25 +24,25 @@ set(WWISE_CORE_DEBUG_COMPONENTS
         ${WWISE_CORE_COMPONENTS}
         "CommunicationCentral")
 
+set(WWISE_CORE_RELEASE_COMPONENTS
+        ${WWISE_CORE_COMPONENTS}
+        )
 
-set(WWISE_CORE_LIBS)
+
+set(WWISE_CORE_DEBUG_LIBS)
+set(WWISE_CORE_RELEASE_LIBS)
 
 foreach(COMPONENT ${WWISE_CORE_DEBUG_COMPONENTS})
-    list(APPEND WWISE_CORE_LIBS "${WWISE_DEBUG_LIB_PATH}/${COMPONENT}.lib")
+    list(APPEND WWISE_CORE_DEBUG_LIBS "${WWISE_DEBUG_LIB_PATH}/${COMPONENT}.lib")
 endforeach()
-file(GLOB PLUGIN_DLLS "${WWISE_DEBUG_DLL_PATH}/*.dll")
+file(GLOB PLUGIN_DEBUG_DLLS "${WWISE_DEBUG_DLL_PATH}/*.dll")
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    foreach(COMPONENT ${WWISE_CORE_DEBUG_COMPONENTS})
-        list(APPEND WWISE_CORE_LIBS "${WWISE_DEBUG_LIB_PATH}/${COMPONENT}.lib")
-    endforeach()
-    file(GLOB PLUGIN_DLLS "${WWISE_DEBUG_DLL_PATH}/*.dll")
-elseif (CMAKE_BUILD_TYPE STREQUAL "Release")
-    foreach(COMPONENT ${WWISE_CORE_COMPONENTS})
-        list(APPEND WWISE_CORE_LIBS "${WWISE_RELEASE_LIB_PATH}/${COMPONENT}.lib")
-    endforeach()
-    file(GLOB PLUGIN_DLLS "${WWISE_RELEASE_DLL_PATH}/*.dll")
-endif()
+file(GLOB PLUGIN_RELEASE_LIBS_ "${WWISE_RELEASE_LIB_PATH}/*.lib")
+foreach(COMPONENT ${WWISE_CORE_RELEASE_COMPONENTS})
+    list(APPEND WWISE_CORE_RELEASE_LIBS "${WWISE_RELEASE_LIB_PATH}/${COMPONENT}.lib")
+	message(${WWISE_RELEASE_LIB_PATH}/${COMPONENT}.lib)
+endforeach()
+file(GLOB PLUGIN_RELEASE_DLLS "${WWISE_RELEASE_DLL_PATH}/*.dll")
 
 set(WWISE_STRM_MNG_PATH "${WWISE_SDK_PATH}/samples/SoundEngine")
 set(WWISE_STRM_MNG_PLATFORM_PATH "${WWISE_STRM_MNG_PATH}/Win32")
@@ -99,7 +99,16 @@ target_include_directories(WwiseAudioSystem
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../IAudioSystem/public
 )
 
-target_link_libraries(WwiseAudioSystem ${WWISE_CORE_LIBS} Core ws2_32 dinput8 Winmm dsound dxguid xinput)
+target_link_libraries(WwiseAudioSystem 
+	$<$<CONFIG:Debug>:${WWISE_CORE_DEBUG_LIBS}> 
+	$<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>:${PLUGIN_RELEASE_LIBS_}>
+	Core 
+	ws2_32 
+	dinput8 
+	Winmm 
+	dsound 
+	dxguid 
+	xinput)
 
 target_precompile_headers(WwiseAudioSystem
 	PRIVATE
