@@ -78,6 +78,7 @@ set_target_properties(WwiseAudioSystem PROPERTIES FOLDER "Engine")
 
 target_compile_definitions(WwiseAudioSystem
 	PRIVATE
+		$<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>:AK_OPTIMIZED>
 		WwiseAudioSystem_EXPORTS
 		UNICODE)
 
