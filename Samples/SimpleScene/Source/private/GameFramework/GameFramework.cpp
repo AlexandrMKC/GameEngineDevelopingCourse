@@ -18,7 +18,7 @@ using namespace GameEngine;
 void GameFramework::Init()
 {
 	std::vector<std::string> soundNames = { "main" };
-	Audio::g_AudioEngine->SoundsLoad(soundNames);
+	Audio::g_AudioEngine->SoundBankLoad("main.bnk");
 
 	RegisterComponentsReflection();
 	RegisterSystems();

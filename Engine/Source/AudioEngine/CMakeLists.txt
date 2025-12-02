@@ -1,14 +1,12 @@
-set(PLATFORM_CONFIG "x64_vc170")
-
 set(WWISE_SDK_PATH "${CMAKE_LIBRARY_PATH}/wwise")
 
 set(WWISE_INCLUDE_PATH "${WWISE_SDK_PATH}/include")
 
-set(WWISE_DEBUG_DLL_PATH "${WWISE_SDK_PATH}/${PLATFORM_CONFIG}/Debug/bin")
-set(WWISE_DEBUG_LIB_PATH "${WWISE_SDK_PATH}/${PLATFORM_CONFIG}/Debug/lib")
+set(WWISE_DEBUG_DLL_PATH "${WWISE_SDK_PATH}/Debug/bin")
+set(WWISE_DEBUG_LIB_PATH "${WWISE_SDK_PATH}/Debug/lib")
 
-set(WWISE_RELEASE_DLL_PATH "${WWISE_SDK_PATH}/${PLATFORM_CONFIG}/Release/bin")
-set(WWISE_RELEASE_LIB_PATH "${WWISE_SDK_PATH}/${PLATFORM_CONFIG}/Release/lib")
+set(WWISE_RELEASE_DLL_PATH "${WWISE_SDK_PATH}/Release/bin")
+set(WWISE_RELEASE_LIB_PATH "${WWISE_SDK_PATH}/Release/lib")
 
 set(WWISE_CORE_CODEC_COMPONENTS
         "AkVorbisDecoder"
@@ -84,19 +82,23 @@ target_compile_definitions(AudioEngine
 target_sources(AudioEngine
 	PRIVATE ${PRIVATE_FILES}
 	PRIVATE ${PUBLIC_FILES}
+	PRIVATE ${WWISE_STRM_MNG_SOURCES}
+	PRIVATE ${WWISE_STRM_MNG_PLATFORM_SOURCES}
 )
 
 target_include_directories(AudioEngine
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/public
 	PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/private
-	PRIVATE ${WWISE_STRM_MNG_SOURCES}
-	PRIVATE ${WWISE_STRM_MNG_PLATFORM_SOURCES}
+	PUBLIC ${WWISE_INCLUDE_PATH}
+	PUBLIC ${WWISE_STRM_MNG_PLATFORM_PATH}
+	PUBLIC ${WWISE_STRM_MNG_INCLUDE_PATH}
+	PUBLIC ${WWISE_GENERATE_SOUND_BANKS_PATH}
 )
 
 target_link_libraries(AudioEngine
 	$<$<CONFIG:Debug>:${WWISE_CORE_DEBUG_LIBS}> 
 	$<$<OR:$<CONFIG:Release>,$<CONFIG:RelWithDebInfo>,$<CONFIG:MinSizeRel>>:${PLUGIN_RELEASE_LIBS_}>
-	Core 
+	Core
 	ws2_32 
 	dinput8 
 	Winmm 
@@ -123,4 +125,5 @@ target_precompile_headers(AudioEngine
 		<limits>
 		<chrono>
 		<filesystem>
+		<memory>
 )
