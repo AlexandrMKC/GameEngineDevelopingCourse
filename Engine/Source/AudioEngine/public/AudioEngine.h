@@ -1,6 +1,5 @@
 #pragma once
 #include <AudioEngine/export.h>
-#include <IAudioSystem.h>
 
 #include <memory.h>
 #include <string>
@@ -23,7 +22,7 @@ namespace GameEngine::Audio {
 		void SoundsLoad(std::vector<std::string>& soundNames);
 
 	private:
-		AudioSystem::IAudioSystem::Ptr m_audioSystem;
+		
 	};
 
 	extern AUDIO_ENGINE_API AudioEngine* g_AudioEngine;

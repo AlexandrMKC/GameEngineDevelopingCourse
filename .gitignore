@@ -18,10 +18,10 @@ mono_crash.*
 
 # Build results
 [Dd]ebug/
-!Engine/External/wwise/SDK/x64_vc170/Debug/
+!Engine/External/wwise/Debug/
 [Dd]ebugPublic/
 [Rr]elease/
-!Engine/External/wwise/SDK/x64_vc170/Release/
+!Engine/External/wwise/Release
 [Rr]eleases/
 x64/
 x86/
@@ -29,8 +29,8 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
-!Engine/External/wwise/SDK/x64_vc170/Debug/bin
-!Engine/External/wwise/SDK/x64_vc170/Release/bin
+!Engine/External/wwise/Debug/bin
+!Engine/External/wwise/Release/bin
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
