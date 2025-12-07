@@ -80,14 +80,14 @@ namespace GameEngine::Audio
         AK::SoundEngine::RenderAudio();
 	}
 
-    void AudioEngine::SoundBankLoad(std::string bank) 
+    void AudioEngine::SoundBankLoad(const std::string& bank) 
     {
         AkBankID bankID;
         AKRESULT resLoadBank = AK::SoundEngine::LoadBank(bank.c_str(), bankID);
         assert(resLoadBank == AK_Success);
     }
 
-    void AudioEngine::SoundBanksLoad(std::vector<std::string>& soundNames)
+    void AudioEngine::SoundBanksLoad(const std::vector<std::string>& soundNames)
     {
         for (const std::string& bankName : soundNames)
         {
@@ -110,7 +110,7 @@ namespace GameEngine::Audio
         assert(resUnregisterObj == AK_Success);
 	}
 
-	void AudioEngine::PlayAudioEvent(uint64_t objID, std::string eventName) 
+	void AudioEngine::PlayAudioEvent(uint64_t objID, const std::string& eventName) 
     {
         AkPlayingID playingID = AK::SoundEngine::PostEvent(eventName.c_str(), objID);
         assert(playingID != 0);

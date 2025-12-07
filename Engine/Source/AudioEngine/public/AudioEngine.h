@@ -31,10 +31,10 @@ namespace GameEngine::Audio
 	public:
 		uint64_t CreateNewObj();
 		void DeleteObj(uint64_t objID);
-		void PlayAudioEvent(uint64_t objID, std::string eventName);
+		void PlayAudioEvent(uint64_t objID, const std::string& eventName);
 		void Update();
-		void SoundBankLoad(std::string bank);
-		void SoundBanksLoad(std::vector<std::string>& soundNames);
+		void SoundBankLoad(const std::string& bank);
+		void SoundBanksLoad(const std::vector<std::string>& soundNames);
 
 	private:
 		AkGameObjectID GetNewObjectID();
