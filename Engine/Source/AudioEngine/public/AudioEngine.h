@@ -19,7 +19,7 @@
 
 namespace GameEngine::Audio 
 {
-	class AUDIO_ENGINE_API AudioEngine 
+	class AUDIO_ENGINE_API AudioEngine final
 	{
 	public:
 		using Ptr = std::unique_ptr<AudioEngine>;

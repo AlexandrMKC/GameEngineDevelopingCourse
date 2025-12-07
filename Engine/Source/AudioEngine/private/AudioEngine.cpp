@@ -15,34 +15,34 @@ namespace GameEngine::Audio
 	{
         AkMemSettings memSettings{};
         AK::MemoryMgr::GetDefaultSettings(memSettings);
-        bool resMemoryMrg = AK::MemoryMgr::Init(&memSettings);
-        assert(resMemoryMrg);
+        AKRESULT resMemoryMrg = AK::MemoryMgr::Init(&memSettings);
+        assert(resMemoryMrg == AK_Success);
 
         AkStreamMgrSettings stmSettings{};
         AK::StreamMgr::GetDefaultSettings(stmSettings);
-        bool resStreamMrg = AK::StreamMgr::Create(stmSettings);
-        assert(resStreamMrg);
+        AK::IAkStreamMgr* streamMrg = AK::StreamMgr::Create(stmSettings);
+        assert(streamMrg != nullptr);
 
         AkDeviceSettings deviceSettings{};
         AK::StreamMgr::GetDefaultDeviceSettings(deviceSettings);
-        bool resLowLevelIO = m_pLowLevelIO->Init(deviceSettings);
-        assert(resLowLevelIO);
+        AKRESULT resLowLevelIO = m_pLowLevelIO->Init(deviceSettings);
+        assert(resLowLevelIO == AK_Success);
 
         auto pathToSounds = Core::g_FileSystem->GetFilePath("Sounds/");
-        bool resSetPath = m_pLowLevelIO->SetBasePath(pathToSounds.c_str());
-        assert(resSetPath);
+        AKRESULT resSetPath = m_pLowLevelIO->SetBasePath(pathToSounds.c_str());
+        assert(resSetPath == AK_Success);
 
         AkInitSettings initSettings{};
         AkPlatformInitSettings platformInitSettings{};
         AK::SoundEngine::GetDefaultInitSettings(initSettings);
         AK::SoundEngine::GetDefaultPlatformInitSettings(platformInitSettings);
-        bool resSoundEngineInit = AK::SoundEngine::Init(&initSettings, &platformInitSettings);
-        assert(resSoundEngineInit);
+        AKRESULT resSoundEngineInit = AK::SoundEngine::Init(&initSettings, &platformInitSettings);
+        assert(resSoundEngineInit == AK_Success);
 
 #ifndef AK_OPTIMIZED
         AkCommSettings commSettings{};
         AK::Comm::GetDefaultInitSettings(commSettings);
-        assert(static_cast<bool>(AK::Comm::Init(commSettings)));
+        assert(AK::Comm::Init(commSettings) == AK_Success);
         AK::SoundEngine::StartProfilerCapture(L"project.prof");
 #endif
 
@@ -83,13 +83,13 @@ namespace GameEngine::Audio
     void AudioEngine::SoundBankLoad(std::string bank) 
     {
         AkBankID bankID;
-        bool resLoadBank = AK::SoundEngine::LoadBank(bank.c_str(), bankID);
-        assert(resLoadBank);
+        AKRESULT resLoadBank = AK::SoundEngine::LoadBank(bank.c_str(), bankID);
+        assert(resLoadBank == AK_Success);
     }
 
     void AudioEngine::SoundBanksLoad(std::vector<std::string>& soundNames)
     {
-        for (auto& bankName : soundNames) 
+        for (const std::string& bankName : soundNames)
         {
             SoundBankLoad(bankName);
         }
@@ -98,22 +98,22 @@ namespace GameEngine::Audio
 	uint64_t AudioEngine::CreateNewObj() 
     {
         AkGameObjectID id = GetNewObjectID();
-        bool resRegisterObj = AK::SoundEngine::RegisterGameObj(id);
-        assert(resRegisterObj);
+        AKRESULT resRegisterObj = AK::SoundEngine::RegisterGameObj(id);
+        assert(resRegisterObj == AK_Success);
 
         return static_cast<uint64_t>(id);
 	}
 
 	void AudioEngine::DeleteObj(uint64_t objID) 
     {
-        bool resUnregisterObj = AK::SoundEngine::UnregisterGameObj(objID);
-        assert(resUnregisterObj);
+        AKRESULT resUnregisterObj = AK::SoundEngine::UnregisterGameObj(objID);
+        assert(resUnregisterObj == AK_Success);
 	}
 
 	void AudioEngine::PlayAudioEvent(uint64_t objID, std::string eventName) 
     {
         AkPlayingID playingID = AK::SoundEngine::PostEvent(eventName.c_str(), objID);
-        assert(static_cast<bool>(playingID));
+        assert(playingID != 0);
 	}
 
     AkGameObjectID AudioEngine::GetNewObjectID() 
