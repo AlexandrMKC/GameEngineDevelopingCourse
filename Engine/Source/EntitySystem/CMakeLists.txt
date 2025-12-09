@@ -53,6 +53,7 @@ target_link_libraries(EntitySystem PRIVATE
 	Math
 	RenderCore
 	RenderEngine
+	AudioEngine
 	
 	PUBLIC ${FLECS_LIBRARIES}
 )

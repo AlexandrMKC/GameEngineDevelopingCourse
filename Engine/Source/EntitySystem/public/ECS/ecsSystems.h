@@ -33,6 +33,11 @@ namespace GameEngine
 			}
 		};
 
+		struct AudioObject 
+		{
+			uint64_t id;
+		};
+
 		void RegisterEcsCoreSystems(flecs::world& world);
 	}
 }
