@@ -8,16 +8,12 @@
 #include <Input/Controller.h>
 #include <RenderObject.h>
 #include <GameWorld.h>
-
 #include <AudioEngine.h>
-#include <vector>
-#include <string>
 
 using namespace GameEngine;
 
 void GameFramework::Init()
 {
-	std::vector<std::string> soundNames = { "main" };
 	Audio::g_AudioEngine->SoundBankLoad("main.bnk");
 
 	RegisterComponentsReflection();
